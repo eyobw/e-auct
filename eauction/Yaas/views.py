@@ -17,3 +17,14 @@ def index(request):
     else:
         return HttpResponseRedirect('')
 
+def categories(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('')
+    else:
+        return HttpResponseRedirect('')
+
+def new_category(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('')
+    else:
+        return HttpResponseRedirect('')
