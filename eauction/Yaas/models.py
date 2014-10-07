@@ -1,4 +1,6 @@
 from django.db import models
 
-class 
+class Auction():
+
+
 # Create your models here.
