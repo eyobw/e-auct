@@ -14,23 +14,28 @@ import datetime
 
 def index(request):
     auction_list = Auction.objects.all()
+
+
     if request.method == 'POST':
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
         user = auth.authenticate(username=username, password=password)
         if user is not None and user.is_active:
             auth.login(request,user)
-            return HttpResponseRedirect('')
-    else:
-        error = "Please Sign in"
-        return render_to_response("index.html", {'error': error},context_instance= RequestContext(request))
-    return render_to_response("index.html", {'auction_list': auction_list},context_instance= RequestContext(request))
+            message = 'Hello: '+username
+            return render_to_response("index.html", {'message': message, 'auction_list':auction_list},context_instance= RequestContext(request))
+        else:
+            error = "Username or Password is wrong"
+            return render_to_response("index.html", {'message': error},context_instance= RequestContext(request))
+    return render_to_response("index.html", {'auction_list': auction_list, },context_instance= RequestContext(request))
 
-def categories(request):
+def item(request, e_id):
+    item = Auction.objects.get(id = e_id)
+
     if request.user.is_authenticated():
-        return HttpResponseRedirect('')
+        return render_to_response("item.html",{ 'item':item} ,context_instance= RequestContext(request))
     else:
-        return HttpResponseRedirect('')
+        return render_to_response("item.html",{ 'item':item} ,context_instance= RequestContext(request))
 
 def new_category(request):
     if request.user.is_authenticated():

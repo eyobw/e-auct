@@ -21,7 +21,7 @@
   </div>
   <div class="form-group">
     <div class="col-sm-10">
-      <p></p><button type="submit" class="btn btn-default">Sign in</button>  Don't have an account?<a href="/regester/"> Click here</a> </p>
+      <button type="submit" class="btn btn-default">Sign in</button>
       <input type="hidden" name="next" value="login">
     </div>
   </div>
@@ -30,17 +30,19 @@
 
 {% endblock %}
 {% block content %}
-    {% if auction_list %}
-
-        <table class="table table-condensed">
-        <tr><th>Auction title</th><th>Category</th><th>Start date</th><th>End date</th></tr>
-        {% for auction in auction_list %}
-           <tr> <td><a href="/item/{{auction.id }}">{{ auction.auction_name }}</a></td>
-               <td>{{ auction.category }}</td>
-               <td>{{ auction.start_date }}</td><td> {{ auction.end_date }}</td></tr>
-
-        {% endfor %}
-        </table>
-
-    {% endif %}
+    <p>
+    <b>Item name:</b> <br/>
+    {{ item.auctioon_name }}<br/><br/>
+    <b>Category:</b> <br/>
+    {{ item.category }}<br/><br/>
+    <b>Current Price:</b> <br/>
+    {{ item.price_max }}<br/><br/>
+    <b>Start date:</b> <br/>
+    {{ item.start_date }}<br/><br/>
+    <b>End date:</b> <br/>
+    {{ item.end_date }}<br/><br/>
+    <b>Auction owner:</b> <br/>
+    {{ item.owner }}<br/><br/>
+    </p>
+{{ item.id }}
 {% endblock %}

@@ -5,9 +5,14 @@ from django.conf import settings
 class AuctionState(models.Model):
     state_name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.state_name
 
 class AuctionCategory(models.Model):
     category_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.category_name
 
 class Auction(models.Model):
     auction_name = models.CharField(max_length=30)
@@ -20,6 +25,7 @@ class Auction(models.Model):
     state = models.ForeignKey(AuctionState)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
 
-
+    def __str__(self):
+        return self.auction_name
 
 
