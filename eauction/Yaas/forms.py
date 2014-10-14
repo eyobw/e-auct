@@ -13,7 +13,7 @@ class RegistrationForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2')
 
         def save(self, commit=True):
-            user = super(RegistrationForm, self).save(commit = False)
+            user = super(RegistrationForm, self).save(commit=False)
             user.email = self.cleaned_data['email']
 
             if commit:
@@ -25,6 +25,8 @@ class AuctionForm(forms.ModelForm):
 
     class Meta:
         model = Auction
+        fields = ('auction_name', 'auction_description','price_min','category','end_date')
+
 
 #Form for category
 class AuctionCategoryForm(forms.ModelForm):

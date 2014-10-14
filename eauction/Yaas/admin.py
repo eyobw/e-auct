@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Yaas.models import Auction,AuctionCategory,AuctionState
+from Yaas.models import Auction,AuctionCategory,AuctionState,Bidder
 
 # Register your models here.
 class AuctionAdmin(admin.ModelAdmin):
@@ -12,3 +12,4 @@ class State(admin.ModelAdmin):
 admin.site.register(AuctionCategory)
 admin.site.register(AuctionState, State)
 admin.site.register(Auction, AuctionAdmin)
+admin.site.register(Bidder)
