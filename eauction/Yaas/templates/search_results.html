@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
 {% block search %}{% include 'search.html' %}{% endblock %}
 {% block login %}
   {% include 'login.html' %}
 {% endblock %}
 {% block content %}
-    {% if auction_list %}
-
+    {% if result %}
         <table class="table table-condensed">
         <tr><th>Auction title</th><th>Category</th><th>Start date</th><th>End date</th></tr>
-        {% for auction in auction_list %}
+    {% for auction in result %}
            <tr> <td><a href="/item/{{auction.id }}">{{ auction.auction_name }}</a></td>
                <td>{{ auction.category }}</td>
                <td>{{ auction.start_date }}</td><td> {{ auction.end_date }}</td></tr>
 
         {% endfor %}
         </table>
-
+        {% else %}
+        Sorry! We dont have theitem you looking for.
     {% endif %}
+
 {% endblock %}

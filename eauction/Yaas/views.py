@@ -11,14 +11,13 @@ from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 from django.http import HttpResponseRedirect
 from Yaas.models import Auction, AuctionState, AuctionCategory
-from Yaas.forms import RegistrationForm, AuctionForm, AuctionCategoryForm
+from Yaas.forms import RegistrationForm, AuctionForm, AuctionCategoryForm, EditProfileForm
 import datetime
 
 # Create your views here.
 
 def index(request):
     auction_list = Auction.objects.all()
-
     if request.method == 'POST':
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
@@ -106,16 +105,21 @@ def new_category(request):
     return render_to_response('new_category.html', args,context_instance= RequestContext(request) )
 
 def edit_profile(request, e_id=1):
-    queryset = User.objects.get(id=e_id)
     if request.POST:
-        form = UserCreationForm(request.POST,instance=queryset)
+        form = EditProfileForm()
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/auctions/')
+            message = "You have successfully edited your email!"
+            return render_to_response('index.html', {'message':message}, context_instance= RequestContext(request))
     else:
-        form = UserCreationForm(instance= queryset)
+        form = EditProfileForm()
         args = {}
         args.update(csrf(request))
-        args ={'forms': form, 'edit': Auction.objects.get(id=e_id)}
+        args ={'form': form, 'edit': Auction.objects.get(id=e_id)}
+    return render_to_response('edit_profile.html',{'form': form,'edit': Auction.objects.get(id=e_id)}, context_instance=RequestContext(request))
 
-    return render_to_response('edit_profile.html',{'forms': form,'edit': Auction.objects.get(id=e_id) }, context_instance=RequestContext(request))
+def search(request):
+    query = request.GET['search']
+    search_result = Auction.objects.filter(auction_name__contains=query)
+
+    return render_to_response('search_results.html',{'result': search_result},context_instance=RequestContext(request))

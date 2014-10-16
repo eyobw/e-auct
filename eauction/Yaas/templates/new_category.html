@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% block search %}{% include 'search.html' %}{% endblock %}
 {% block content %}
     <div class="row">
     <form action="/new_category/" method="post">{% csrf_token %}

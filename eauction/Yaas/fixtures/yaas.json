@@ -1,0 +1,19 @@
+[{"fields": {"state_name": "active"}, "pk": 1, "model": "Yaas.auctionstate"},
+    {"fields": {"state_name": "banned"}, "pk": 2, "model": "Yaas.auctionstate"},
+    {"fields": {"state_name": "due"}, "pk": 3, "model": "Yaas.auctionstate"},
+    {"fields": {"state_name": "adjudicated"}, "pk": 4, "model": "Yaas.auctionstate"},
+
+    {"fields": {"category_name": "Electronics"}, "pk": 1, "model": "Yaas.auctioncategory"},
+    {"fields": {"category_name": "Clothes"}, "pk": 2, "model": "Yaas.auctioncategory"},
+    {"fields": {"category_name": "Food"}, "pk": 3, "model": "Yaas.auctioncategory"},
+    {"fields": {"category_name": "Accessories  "}, "pk": 4, "model": "Yaas.auctioncategory"},
+    {"fields":
+    {"category": 1, "price_min": "0.07", "start_date": "2014-10-08T11:55:05Z", "auction_description": "tv", "owner": 2, "auction_name": "TV", "state": 1, "end_date": "2014-10-08T11:55:08Z"}, "pk": 1, "model": "Yaas.auction"}, {"fields": {"category": 1, "price_min": "400", "start_date": "2014-10-09T11:56:43Z", "auction_description": "Mobile Phone", "owner": 1, "auction_name": "iPhone 4s", "state": 1, "end_date": "2014-10-22T11:57:19Z"}, "pk": 2, "model": "Yaas.auction"},
+    {"fields":
+    {"category": 2, "price_min": "50.01", "start_date": "2014-10-09T20:26:58Z", "auction_description": "Summer shirt", "owner": 1, "auction_name": "Shirt", "state": 1, "end_date": "2014-10-30T21:26:46Z"}, "pk": 3, "model": "Yaas.auction"}, {"fields": {"category": 3, "price_min": "0.06", "start_date": "2014-10-11T14:20:40Z", "auction_description": "Fruits", "owner": 1, "auction_name": "Orange", "state": 1, "end_date": "2014-10-14T14:21:45Z"}, "pk": 4, "model": "Yaas.auction"},
+    {"fields":
+    {"category": 1, "price_min": "0.03", "start_date": "2014-10-13T11:52:13.055Z", "auction_description": "3123123", "owner": 2, "auction_name": "221232131233123", "state": 1, "end_date": "2014-10-08T11:55:08Z"}, "pk": 5, "model": "Yaas.auction"}, {"fields": {"category": 1, "price_min": "0.24", "start_date": "2014-10-13T15:00:09.225Z", "auction_description": "eowieoi", "owner": 1, "auction_name": "oiiou", "state": 1, "end_date": "2014-10-08T11:55:08Z"}, "pk": 6, "model": "Yaas.auction"},
+    {"fields":
+    {"category": 1, "price_min": "0.26", "start_date": "2014-10-13T15:01:52.799Z", "auction_description": "3232", "owner": 1, "auction_name": "23", "state": 1, "end_date": "2014-10-08T11:55:08Z"}, "pk": 7, "model": "Yaas.auction"}, {"fields": {"category": 1, "price_min": "0.06", "start_date": "2014-10-13T15:05:06.992Z", "auction_description": "dave", "owner": 1, "auction_name": "dave", "state": 1, "end_date": "2014-10-08T11:55:08Z"}, "pk": 8, "model": "Yaas.auction"},
+    {"fields":
+    {"category": 1, "price_min": "0.51", "start_date": "2014-10-13T16:25:50.238Z", "auction_description": "eyob2", "owner": 2, "auction_name": "eyob2", "state": 1, "end_date": "2014-10-08T11:55:08Z"}, "pk": 9, "model": "Yaas.auction"}, {"fields": {"category": 1, "price_min": "0.28", "start_date": "2014-10-14T07:22:55.565Z", "auction_description": "Well well", "owner": 2, "auction_name": "Well", "state": 1, "end_date": "2014-10-08T11:55:08Z"}, "pk": 10, "model": "Yaas.auction"}]

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
-{% block search %}{% endblock %}
+{% block search %}{% include 'search.html' %}{% endblock %}
 {% block login %}
 {% include 'login.html' %}
 {% endblock %}
@@ -16,7 +16,7 @@
     {{ item.start_date }}<br/><br/>
     <b>End date:</b> <br/>
     {{ item.end_date }}<br/><br/>
-    <b>Auction owner:</b> <br/>
+    <b>Seller:</b> <br/>
     {{ item.owner }}<br/><br/>
     </p>
 
