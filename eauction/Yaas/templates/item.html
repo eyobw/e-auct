@@ -1,17 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 {% block search %}{% include 'search.html' %}{% endblock %}
-{% block login %}
-{% include 'login.html' %}
-{% endblock %}
+
 {% block content %}
     <p>
     <b>Item name:</b> <br/>
     {{ item.auction_name }}<br/><br/>
-    <b>Category:</b> <br/>
-    {{ item.category }}<br/><br/>
-    <b>Current Price:</b> <br/>
-    {{ item.price_max }}<br/><br/>
+    <b>Description:</b> <br/>
+    {{ item.auction_description }}<br/><br/>
+    <b>Initial Price:</b> <br/>
+    {{ item.price_min }}€ <br/><br/>
     <b>Start date:</b> <br/>
     {{ item.start_date }}<br/><br/>
     <b>End date:</b> <br/>
@@ -20,4 +18,29 @@
     {{ item.owner }}<br/><br/>
     </p>
 
+    <P>
+    {% if current %}
+    <b>Current winning price: </b>{{ current.price }}€<br/>
+    <b>Bidder: </b>{{ current.bidder_name.username }}
+    {% endif %}
+    </P>
+    {{ message }}
+{% if user.id == item.owner.id %}
+    ediit
+    {% else %}
+    <form action="" method="get" xmlns="http://www.w3.org/1999/html">
+        {% csrf_token %}
+   <b> Bid this Item: </b> <input name="price" type="number"step="0.01" min="{{ item.price_min}}">€
+    <input type="submit" class="btn btn-default" name="submit" value="Bid">
+    </form>
+
+{% endif %}
+{% if user.is_staff %}
+
+    <form action="" method="post" xmlns="http://www.w3.org/1999/html">
+        {% csrf_token %}
+    <input type="submit" class="btn btn-default" value="Ban this auction" name="ban" value="Bid">
+    </form>
+
+    {% endif %}
 {% endblock %}

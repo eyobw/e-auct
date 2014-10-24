@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block search %}{% include 'search.html' %}{% endblock %}
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+        <table>
+           <tr><th><label for="id_auction_description">Auction description:</label></th><td>{{ form.auction_description }}</td></tr>
+        </table>
+    <input type="submit" name="submit" value="Edit Auction">
+    </form>
+
+{% endblock %}

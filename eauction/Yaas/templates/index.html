@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 {% block search %}{% include 'search.html' %}{% endblock %}
-{% block login %}
-  {% include 'login.html' %}
-{% endblock %}
+
 {% block content %}
+    {{ message }}
     {% if auction_list %}
 
         <table class="table table-condensed">
@@ -12,8 +11,11 @@
         {% for auction in auction_list %}
            <tr> <td><a href="/item/{{auction.id }}">{{ auction.auction_name }}</a></td>
                <td>{{ auction.category }}</td>
-               <td>{{ auction.start_date }}</td><td> {{ auction.end_date }}</td></tr>
-
+               <td>{{ auction.start_date }}</td><td> {{ auction.end_date }}</td>
+               {% if user.id == auction.owner_id %}
+                   <td><a href="/edit_auction/{{auction.id }}">edit</a>
+</td></tr>
+               {% endif %}
         {% endfor %}
         </table>
 

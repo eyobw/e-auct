@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <p>
+    <b>Item name:</b> <br/>
+    {{ auction_name }}<br/><br/>
+    <b>Category:</b> <br/>
+    {{ category }}<br/><br/>
+    <b>Initial Price:</b> <br/>
+    {{ price_min }}€ <br/><br/>
+    <b>Description:</b> <br/>
+    {{ auction_description }}<br/><br/>
+    <b>End date:</b> <br/>
+    {{ end_date }}<br/><br/>
+        <form action="" method="POST">
+         {% csrf_token %}
+    <input type="submit" value="Confirm" class="btn btn-default" name="confirm" role="button">
+     <input type="submit" value="Cancel" class="btn btn-default" name="back" role="button">
+    </form>
+    <form action="" method="POST">
+         {% csrf_token %}
+
+        </form>
+    </p>
+
+
+{% endblock %}

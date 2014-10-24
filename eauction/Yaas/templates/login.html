@@ -1,13 +1,9 @@
 
-    {% if user.is_authenticated %}
-    <p>Welcome, {{ user.username|capfirst }}. <a href="/logout/"> logout.</a></p>
-    {% else %}
-    <p><b>{{ message }}</b></p>
+
   {% if form.errors%}
     <p> Password or username is incorrect </p>
   {% endif %}
-
-    <form class="form-horizontal" action="" role="form" method="post">
+    <form class="form-horizontal" action="/accounts/login/" role="form" method="post">
     {% csrf_token %}
   <div class="form-group">
     <div class="col-sm-10">
@@ -27,4 +23,4 @@
   </div>
 </form>
 
-{% endif %}
+

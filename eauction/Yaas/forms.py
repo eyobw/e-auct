@@ -2,6 +2,7 @@ __author__ = 'eyob'
 
 from django import forms
 from django.contrib.auth.models import User
+from datetime import datetime, timedelta
 from django.contrib.auth.forms import UserCreationForm
 from Yaas.models import Auction, AuctionCategory, Bidder
 
@@ -27,6 +28,13 @@ class AuctionForm(forms.ModelForm):
         model = Auction
         fields = ('auction_name', 'auction_description','price_min','category','end_date')
 
+        def clean_end_date(self):
+            cd = self.cleaned_data
+
+            end_date = cd.get('end_date')
+            if(end_date-datetime.now())<timedelta(hours=72):
+                raise forms.ValidationError('End date should be at least 72 hours from now')
+            return end_date
 
 #Form for category
 class AuctionCategoryForm(forms.ModelForm):
