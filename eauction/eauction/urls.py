@@ -1,5 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+import django_cron
+
+
 
 urlpatterns = patterns('',
     # URLs:

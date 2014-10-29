@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.template import loader, Context
+from django.utils.translation import ugettext as _
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.db.models import Max
@@ -32,15 +33,17 @@ class JSONResponse(HttpResponse):
 # Create your views here.
 
 def index(request):
-    auction_list = Auction.objects.filter(end_date__gt=datetime.today()).order_by('end_date').filter(state_id=1)
+    auction_list = Auction.objects.filter(end_date__gt=datetime.now()).order_by('end_date').filter(state_id=1)
 
     return render_to_response("index.html", {'auction_list': auction_list}, context_instance=RequestContext(request))
 
 
 def item(request, e_id):
     product = Auction.objects.filter(state_id=1).get(id=e_id)
+    current_bid=''
+    message = ''
     if request.user.is_authenticated():
-        message=''
+
         #Ban an auction
         if request.user.is_superuser:
             if request.POST.get('ban'):
@@ -98,7 +101,7 @@ def item(request, e_id):
     return render_to_response("item.html",
                               {'item': product, 'user': request.user, 'current': current_bid, 'message': message},
                               context_instance=RequestContext(request))
-
+#variable for new auction
 new_auct=''
 
 @login_required
@@ -145,7 +148,7 @@ def register(request):
             form = RegistrationForm(request.POST)
             if form.is_valid():
                 form.save()
-                message = "You have successfully registered!"
+                message = _("You have successfully registered!")
                 return render_to_response('index.html', {'message': message}, context_instance=RequestContext(request))
         form = RegistrationForm()
         args = {}
@@ -187,7 +190,7 @@ def new_category(request):
         form = BidAuctionForm(request.POST)
         if form.is_valid():
             form.save()
-            message = "You have successfully created a category!"
+            message =_("You have successfully created a category!")
             return render_to_response('index.html', {'message': message}, context_instance=RequestContext(request))
     form = BidAuctionForm()
     args = {}
@@ -243,7 +246,7 @@ def my_profile(self):
 @csrf_exempt
 def auction_list(request):
     if request.method == 'GET':
-        auction = Auction.objects.all()
+        auction = Auction.objects.filter
         serializer = AuctionSerializer(auction, many=True)
         return JSONResponse(serializer.data)
 

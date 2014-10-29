@@ -25,6 +25,7 @@
     {% endif %}
     </P>
     {{ message }}
+    {% if user.is_authenticated %}
 {% if user.id == item.owner.id %}
     ediit
     {% else %}
@@ -35,6 +36,7 @@
     </form>
 
 {% endif %}
+    {% endif %}
 {% if user.is_staff %}
 
     <form action="" method="post" xmlns="http://www.w3.org/1999/html">
