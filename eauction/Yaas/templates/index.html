@@ -1,9 +1,13 @@
+
 {% extends 'base.html' %}
+{% load i18n %}
+
 {% block title %}Home{% endblock %}
 {% block search %}{% include 'search.html' %}{% endblock %}
 
 {% block content %}
-    {{ message }}
+
+    {% trans message %}
     {% if auction_list %}
 
         <table class="table table-condensed">

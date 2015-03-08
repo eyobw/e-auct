@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -14,6 +15,7 @@
 
 <header>
     <nav class="navbar navbar-default" role="navigation">
+
   <div class="container-fluid">
     <!-- Home and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -29,22 +31,36 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Browse Categories</a></li>
+       {% if user.is_authenticated %} <li class="active"><a href="/change_password/">Change password</a></li>{% endif %}
         <li><a href="/new_auction/">Add Auction</a></li>
 
       </ul>
       {% block search %}{% endblock %}
+
         <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
 
+        <form action="{% url 'set_language' %}" method="post" class="navbar-form navbar-left">
+{% csrf_token %}
+<input name="next" type="hidden" value="{{ redirect_to }}" />
+<select name="language" class="form-control">
+{% get_language_info_list for LANGUAGES as languages %}
+{% for language in languages %}
+<option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+    {{ language.name_local }} ({{ language.code }})
+</option>
+{% endfor %}
+</select>
+<input type="submit" class="btn btn-default" value="Go" />
+</form>
 
-          </ul>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav></header>
 <div class="col-md-4">
+
 {% if user.is_authenticated %}
      <p>Welcome, {{ user.username|capfirst }}. <a href="/logout/"> logout.</a></p>
 {% else %}

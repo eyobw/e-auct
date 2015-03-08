@@ -1,9 +1,12 @@
+
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Home{% endblock %}
 {% block search %}{% include 'search.html' %}{% endblock %}
 
 
 {% block content %}
+   {% trans message  %}
     <div class="col-md-6">
     <form action="" method="post" xmlns="http://www.w3.org/1999/html" name="create">{% csrf_token %}
         <table class="table table-condensed">
@@ -13,7 +16,7 @@
     <tr><th><label for="id_auction_description">Auction description:</label></th>
     <td><textarea class="form-control" cols="40" id="id_auction_description" name="auction_description" rows="10">
     </textarea></td></tr>
-    <tr><th><label for="id_price_min">Price min:</label></th><td>{{ form.price_min }}</td></tr>
+    <tr><th><label for="id_price_min">Price min:</label></th><td><input id="id_price_min" name="price_min" step="0.01" type="number" min="0.01" value="0" /></td></tr>
     <tr><th><label for="id_category">Category:</label></th><td>{{ form.category }}</td></tr>
     <tr><th><label for="id_end_date">End date:</label></th><td><input id="id_end_date" name="end_date" type="text" />
     <p>Format:YYYY-MM-DD h:m:s eg. 2014-10-08 14:55:08</p></td></tr>

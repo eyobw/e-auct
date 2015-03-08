@@ -1,4 +1,6 @@
+
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Home{% endblock %}
 {% block search %}{% include 'search.html' %}{% endblock %}
 
@@ -27,7 +29,7 @@
     {{ message }}
     {% if user.is_authenticated %}
 {% if user.id == item.owner.id %}
-    ediit
+
     {% else %}
     <form action="" method="get" xmlns="http://www.w3.org/1999/html">
         {% csrf_token %}

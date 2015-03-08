@@ -1,6 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-import django_cron
+from django.conf.urls.i18n import i18n_patterns
+from Yaas import api
+from Yaas.api import BidAuctionView
+from rest_framework.urlpatterns import format_suffix_patterns
+from django.utils.translation import ugettext_lazy as _
+from rest_framework import renderers
+
 
 
 
@@ -21,9 +27,18 @@ urlpatterns = patterns('',
     url(r'^search_results/$', 'Yaas.views.search', name='search'),
     url(r'^my_profile/$', 'Yaas.views.search', name='My profile'),
     url(r'^confirm/$', 'Yaas.views.confirm', name='confirm'),
+    url(r'^bid_api/$', 'Yaas.views.bid_auction', name='bid'), #WS2
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     # url(r'^blog/', include('blog.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^auction_list/$', 'Yaas.views.auction_list', name='list'),
-    url(r'^auction_list/(?P<pk>\d+)/$', 'Yaas.views.list_detail', name='list'),
+
+    #API
+    url(r'^api/auction_list/$', api.AuctionList.as_view()), #WS1
+    url(r'^api/auction_list/(?P<pk>\d+)/$', api.AuctionDetail.as_view()), #WS1
+    url(r'^api/bidders/$', api.BidAuctionView.as_view({'get': 'list','post': 'create'})),
+    url(r'^api/bid_auction/$', api.BidFilter.as_view()),
+
     url(r'^admin/', include(admin.site.urls)),
 )
+
+urlpatterns= format_suffix_patterns(urlpatterns)

@@ -9,7 +9,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from __future__ import absolute_import
 import os
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -40,7 +43,12 @@ INSTALLED_APPS = (
     'django_cron',
     'autofixture',
     'Yaas',
+    'djcelery',
+    'kombu.transport.django'
 )
+
+import djcelery
+djcelery.setup_loader()
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -50,6 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'eauction.urls'
@@ -59,6 +68,10 @@ WSGI_APPLICATION = 'eauction.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+
+BROKER_URL = 'django://'
+CELERY_IMPORTS = ('Yaas.task_controller')
+
 
 DATABASES = {
     'default': {
@@ -75,13 +88,31 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Helsinki'
 
+CELERY_TIMEZONE = 'Europe/Helsinki'
+
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
+
+LOCALE_PATHS = ('locale',)
+
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+from datetime import timedelta
 
 
+
+
+
+
+from django.utils.translation import ugettext_lazy as _
+LANGUAGES = (
+    ('fi', _('Finnish')),
+    ('en', _('English')),
+)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 

@@ -1,0 +1,41 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+
+
+#: .\Yaas\views.py:81
+msgid "You should bid at least 0.01€ more than the initial value"
+msgstr "FINNISH"
+
+#: .\Yaas\views.py:93
+msgid "You already bid, please wait until others bid"
+msgstr "FINNISH"
+
+#: .\Yaas\views.py:128
+msgid "Are you sure you like to create this auction?"
+msgstr "FINNISH"
+
+#: .\Yaas\views.py:136
+msgid "Invalid input! Please fill the form again"
+msgstr "FINNISH"
+
+#: .\Yaas\views.py:162
+msgid "You have successfully registered!"
+msgstr "FINNISH"
+
+#: .\Yaas\views.py:180
+msgid "Hello: "
+msgstr "FINNISH"
+
+#: .\Yaas\views.py:204
+msgid "You have successfully created a category!"
+msgstr "FINNISH"
+
+#: .\Yaas\views.py:218
+msgid "You have successfully edited your email!"
+msgstr "FINNISH"

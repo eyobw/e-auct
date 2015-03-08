@@ -17,12 +17,13 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONPRenderer
 from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view
 from Yaas.models import Auction, AuctionState, AuctionCategory, Bidder
-from Yaas.serializers import AuctionSerializer
-from Yaas.forms import RegistrationForm, AuctionForm, AuctionCategoryForm, EditProfileForm, BidAuctionForm
+from Yaas.serializers import AuctionSerializer, BidSerializer
+from Yaas.forms import RegistrationForm, AuctionForm, BidAuctionForm
 from datetime import timedelta, datetime
 
-
+siteLanguages = (('en', 'English'), ('fi', 'Finnish' ))
 
 class JSONResponse(HttpResponse):
 
@@ -32,14 +33,19 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 # Create your views here.
 
+
 def index(request):
     auction_list = Auction.objects.filter(end_date__gt=datetime.now()).order_by('end_date').filter(state_id=1)
 
-    return render_to_response("index.html", {'auction_list': auction_list}, context_instance=RequestContext(request))
+    return render_to_response("index.html", {'auction_list': auction_list,'available_languages': ['en', 'fi']}, context_instance=RequestContext(request))
 
 
 def item(request, e_id):
-    product = Auction.objects.filter(state_id=1).get(id=e_id)
+    try:
+        product = Auction.objects.filter(state_id=1).get(id=e_id)
+    except Auction.DoesNotExist:
+        return HttpResponse(status=404)
+
     current_bid=''
     message = ''
     if request.user.is_authenticated():
@@ -73,10 +79,10 @@ def item(request, e_id):
                         bid = Bidder(price=price_val, bidder_name_id=request.user.id, item_id=e_id)
                         bid.save()
                         #send email to the auction owner
-                        send_mail('Auction created!','This auction has been created!','sender@yaas.com' , [request.user.email], fail_silently=True)
+                        send_mail('Auction created!','You have auctioned this product!','sender@yaas.com' , [request.user.email], fail_silently=True)
                         message = 'Maximum bid is ' + str(price_val)
                     else:
-                        message = 'You should bid at least 0.01€ more than the initial value'
+                        message = _('You should bid at least 0.01€ more than the initial value')
         else:
             current_bid = Bidder.objects.filter(item=e_id).get(price=Decimal(b_price['price__max']))
 
@@ -85,14 +91,15 @@ def item(request, e_id):
             else:
                 if request.GET:
                     price_val = Decimal(request.GET['price'])
-                    if Decimal(b_price['price__max']) <= price_val:
+                    if Decimal(b_price['price__max']) < price_val:
                         #Check if user is bidding while he is winning
                         if current_bid.bidder_name.id == request.user.id:
-                            message = 'You already bid, please wait until others bid'
+                            message = _('You already bid, please wait until others bid')
                         else:
                             bid = Bidder(price=price_val, bidder_name_id=request.user.id, item_id=e_id)
                             bid.save()
-                            send_mail('Auction created!','This auction has been created!','sender@yaas.com' , [request.user.email], fail_silently=True)
+                            send_mail('Someone has bid on the item you auctioned!','Someone has raised the bid!','sender@yaas.com' , [current_bid.bidder_name.email], fail_silently=True)
+                            send_mail('Bidding has been made!','This bid has been created!','sender@yaas.com' , [request.user.email], fail_silently=True)
                             message = 'Maximum bid is ' + str(price_val)
                         return render_to_response("item.html",
                                                   {'item': product, 'user': request.user,'current': current_bid, 'message': message},
@@ -107,23 +114,32 @@ new_auct=''
 @login_required
 def new_auction(request):
     auct = {}
+    message = 'Auction'
     global new_auct
     form = AuctionForm()
     if request.POST.get('create'):
         form = AuctionForm(request.POST)
-        if form.is_valid():
-            auct['auction_name'] = request.POST['auction_name']
-            auct['auction_description'] = request.POST['auction_description']
-            auct['price_min'] = request.POST['price_min']
-            auct['category'] = form.cleaned_data['category']
-            auct['cat'] = request.POST['category']
-            auct['end_date'] = request.POST['end_date']
-            if (datetime.strptime(auct['end_date'], '%Y-%m-%d %H:%M:%S')- datetime.today()) > timedelta(hours=72):
-                new_auct= Auction(auction_name=auct['auction_name'], auction_description=auct['auction_description'],
-                         price_min=auct['price_min'], category_id=auct['cat'], end_date=auct['end_date'],owner_id=request.user.id)
-                #form.save()
-                auct['message'] = "Are you sure you like to create this auction?"
-                return render_to_response('confirm_auction.html', auct, context_instance=RequestContext(request))
+        #if form.is_valid():
+        auct['auction_name'] = request.POST['auction_name']
+        auct['auction_description'] = request.POST['auction_description']
+        auct['price_min'] = request.POST['price_min']
+        #auct['category'] = form.cleaned_data['category']
+        auct['cat'] = request.POST['category']
+        auct['end_date'] = request.POST['end_date']
+        if (datetime.strptime(auct['end_date'], '%Y-%m-%d %H:%M:%S')- datetime.now()) > timedelta(hours=72):
+            new_auct= Auction(auction_name=auct['auction_name'], auction_description=auct['auction_description'],
+                     price_min=auct['price_min'], category_id=auct['cat'], end_date=auct['end_date'],owner_id=request.user.id)
+            #form.save()
+            auct['message'] = _("Are you sure you like to create this auction?")
+            return render_to_response('confirm_auction.html', auct, context_instance=RequestContext(request))
+        else:
+            form = AuctionForm()
+            args = {}
+            args.update(csrf(request))
+            args['form'] = form
+            args['users'] = request.user.id
+            args['message'] = _('Invalid input! Please fill the form again')
+            return render_to_response('create_auction.html', args, context_instance=RequestContext(request))
     if request.POST.get('confirm'):
         new_auct.save()
         message = 'Auction created!!'
@@ -166,7 +182,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None and user.is_active:
             auth.login(request, user)
-            message = 'Hello: ' + username
+            message = _('Hello: ') + username
             return HttpResponseRedirect('/auctions/')
         else:
             error = "Username or Password is wrong"
@@ -201,10 +217,10 @@ def new_category(request):
 
 def edit_profile(request, e_id=1):
     if request.POST:
-        form = EditProfileForm()
+        form = ''
         if form.is_valid():
             form.save()
-            message = "You have successfully edited your email!"
+            message = _("You have successfully edited your email!")
             return render_to_response('index.html', {'message': message}, context_instance=RequestContext(request))
     else:
         form = AuctionForm()
@@ -240,7 +256,7 @@ def edit_auction(request, e_id=1):
 
 
 def my_profile(self):
-    return ''  #TODO
+    return ''
 
 #Web service
 @csrf_exempt
@@ -250,6 +266,7 @@ def auction_list(request):
         serializer = AuctionSerializer(auction, many=True)
         return JSONResponse(serializer.data)
 
+@api_view(['GET'])
 def list_detail(request, pk):
     try:
         auction = Auction.objects.get(pk=pk)
@@ -259,3 +276,23 @@ def list_detail(request, pk):
     if request.method == 'GET':
         serializer = AuctionSerializer(auction)
         return JSONResponse(serializer.data)
+
+
+@login_required
+@api_view(['POST'])
+def bid_auction(request):
+    if request.method == 'POST':
+        serializer = BidSerializer(data=request.DATA)
+        if serializer.is_valid():
+            serializer.object.bidder_name = request.user
+            b_price =Bidder.objects.filter(item=serializer.object.item.id).aggregate(Max('price'))
+            if request.user == serializer.object.item.owner:
+                return JSONResponse('You cannot bid on your own item', status=400)
+            elif b_price['price__max'] is not None:
+                current_bid = Bidder.objects.filter(item=serializer.object.item.id).get(price=Decimal(b_price['price__max']))
+                if current_bid.bidder_name.id == request.user.id:
+                    return JSONResponse('You cannot bid while you are winning', status=400)
+            else:
+                serializer.save()
+            return JSONResponse(serializer.data, status=201)
+        return JSONResponse(serializer.errors, status=400)

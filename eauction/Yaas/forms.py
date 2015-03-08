@@ -47,7 +47,7 @@ class BidAuctionForm(forms.ModelForm):
     class Meta:
         model = Bidder
 
-
+'''
 class EditProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
@@ -66,4 +66,4 @@ class EditProfileForm(forms.ModelForm):
         u.email = self.cleaned_data['email']
         u.save()
         profile = super(EditProfileForm, self).save(*args, **kwargs)
-        return profile
+        return profile'''
